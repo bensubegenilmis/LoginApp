@@ -1,7 +1,11 @@
 import { StyleSheet, Text, View , KeyboardAvoidingView, TextInput, TouchableOpacity} from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 
 export default function LoginScreen() {
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
   return (
     <KeyboardAvoidingView
     style = {styles.container}
@@ -10,10 +14,16 @@ export default function LoginScreen() {
         
       <View style = {styles.inputContainer}>
         <TextInput style = {styles.input}
-         placeholder='Email'/>
+         placeholder='Email'
+         value={email}
+         onChangeText={text => setEmail(text)}
+         />
 
         <TextInput style = {styles.input}
-        placeholder='Şifre'/>
+        placeholder='Şifre' 
+        value={password}
+        onChangeText={text => setPassword(text)}
+        secureTextEntry/>
       </View>
       <View style = {styles.buttonContainer}>
         <TouchableOpacity style = {styles.button}>
@@ -39,13 +49,36 @@ const styles = StyleSheet.create({
     },
     input:{
         backgroundColor:'white',
-        paddingHorizontal:
+        paddingHorizontal: 15,
+        paddingVertical:10,
+        marginTop:5,
+        borderRadius:10,
     },
-    buttonContainer:{},
-    button:{},
-    buttonText:{},
-    outlineButton:{},
-    outlineButtonText:{},
+    buttonContainer:{
+        width:'50%',
+        marginTop:20,
+    },
+    button:{
+        backgroundColor:'deepskyblue',
+        padding:15,
+        alignItems:'center',
+        borderRadius:10,
+    },
+    buttonText:{
+        color:'white',
+        fontSize:18,
+        fontWeight:'700',
+
+    },
+    outlineButton:{
+        backgroundColor:'white',
+        marginTop:5,
+    },
+    outlineButtonText:{
+        fontSize:18,
+        fontWeight:'700',
+        color:'deepskyblue'
+    },
 
 
 
