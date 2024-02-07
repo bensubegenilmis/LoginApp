@@ -1,17 +1,38 @@
 import { StyleSheet, Text, View, KeyboardAvoidingView, TextInput, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import { auth } from '../firebase';
+import { useNavigation } from '@react-navigation/native';
 
 export default function LoginScreen() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const navigation = useNavigation (); //giriş yaptan sonra ana sayfaya atar.
+    useEffect(()=> {
+        auth.onAuthStateChanged((user) =>{
+            if(user){
+                navigation.navigate('Home');
+            }
+
+        });
+    },[]);
+
+
     const handleSignUp = () => {
         auth.createUserWithEmailAndPassword(email,password).
-        then(userCredentials =>{
+        then((userCredentials) =>{
             const user = userCredentials.user;
-            console.log('Kullanıcı ', user.email)
+            console.log('Kullanıcı ', user.email);
+        })
+        .catch((error) => alert(error.message));
+    };
+
+    const handleLogin = () => {
+        auth.signInWithEmailAndPassword(email,password)
+        .then((userCredentials) =>{
+            const user = userCredentials.user;
+            console.log('Kullanıcı giriş yaptı', user.email);
         })
         .catch((error) => alert(error.message));
     };
@@ -26,18 +47,19 @@ export default function LoginScreen() {
                 <TextInput style={styles.input}
                     placeholder='Email'
                     value={email}
-                    onChangeText={text => setEmail(text)}
+                    onChangeText={(text) => setEmail(text)}
                 />
 
                 <TextInput style={styles.input}
                     placeholder='Şifre'
                     value={password}
-                    onChangeText={text => setPassword(text)} //atama yapar
+                    onChangeText={(text) => setPassword(text)} //atama yapar
                     secureTextEntry  //şifreyi gizler
                 />
             </View>
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity onPress={handleLogin}
+                style={styles.button}>
                     <Text style={styles.buttonText}>Giriş Yap</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleSignUp}
